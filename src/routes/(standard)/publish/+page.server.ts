@@ -1,6 +1,20 @@
+import { env } from '$env/dynamic/private';
+import { fireWebhook } from '$lib/discordWebhook';
 import { getUniverseDetails, getUniverseId, userOwnsPlace } from '$lib/robloxApi';
 import { isPlaceRegistered, placePassesChecks, updateWorld } from '../../../githubApp';
 import { fail } from '@sveltejs/kit';
+
+function fireDiscordWebhook(placeId: string) {
+	if (!env.DISCORD_WEBHOOK_URL) {
+		return;
+	}
+
+	return fireWebhook(env.DISCORD_WEBHOOK_URL, {
+		content: `## New world published! <:Rorooms:1298030027182706809>\n\nhttps://roblox.com/games/${placeId}`,
+		embeds: null,
+		attachments: []
+	});
+}
 
 export const actions = {
 	publish: async (event) => {
@@ -29,6 +43,7 @@ export const actions = {
 							}).then((result) => {
 								if (result == true) {
 									console.log(`${robloxProfile.name} updated ${placeId}! 🎉`);
+									fireDiscordWebhook(placeId);
 								}
 
 								return { success: result == true };
