@@ -43,7 +43,10 @@ export const actions = {
 							}).then((result) => {
 								if (result == true) {
 									console.log(`${robloxProfile.name} updated ${placeId}! 🎉`);
-									fireDiscordWebhook(placeId);
+
+									if (!alreadyRegistered && checkPass.passed) {
+										fireDiscordWebhook(placeId);
+									}
 								}
 
 								return { success: result == true };
