@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
 
 export function load() {
-	redirect(302, 'https://x.com/UseRorooms');
+	redirect(302, 'https://loneka.com/x');
 }
